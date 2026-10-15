@@ -10,7 +10,7 @@ const specials = [
     price: 450,
     description:
       "Traditional Ethiopian minced beef seasoned with spiced butter and mitmita.",
-    image: "/images/kitfo.png",
+    image: "/images/kitfo.jpg",
   },
   {
     id: "doro-wot",
@@ -19,7 +19,7 @@ const specials = [
     price: 400,
     description:
       "A rich, spicy chicken stew prepared with berbere and Ethiopian spices.",
-    image: "/images/Doro-wet.png",
+    image: "/images/Doro-wet.jpg",
   },
   {
     id: "spris",
@@ -28,7 +28,7 @@ const specials = [
     price: 180,
     description:
       "A refreshing Ethiopian-style mixed fruit juice.",
-    image: "/images/spric.png",
+    image: "/images/spric.jpg",
   },
 ];
 
@@ -54,7 +54,7 @@ const jsonLd = {
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen overflow-hidden bg-stone-50 text-slate-900">
+    <main className="min-h-screen overflow-hidden bg-stone-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -91,7 +91,7 @@ export default function HomePage() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/menu"
-                className="inline-flex min-h-12 items-center justify-center rounded-xl bg-amber-400 px-6 py-3 font-bold text-slate-950 transition-colors hover:bg-amber-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-400"
+                className="inline-flex min-h-12 items-center justify-center rounded-xl bg-amber-400 px-6 py-3 font-bold text-slate-950 dark:text-white transition-colors hover:bg-amber-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-400"
               >
                 Explore Our Menu
                 <span aria-hidden="true" className="ml-2">
@@ -146,7 +146,7 @@ export default function HomePage() {
       {/* Featured dishes */}
       <section
         aria-labelledby="specials-heading"
-        className="mx-auto bg-whitegray-50 max-w-7xl px-5 py-14 sm:px-8 sm:py-20 lg:px-10"
+        className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20 lg:px-10"
       >
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -161,7 +161,7 @@ export default function HomePage() {
               Favorites worth trying
             </h2>
 
-            <p className="mt-3 max-w-xl leading-7 text-slate-600">
+            <p className="mt-3 max-w-xl leading-7 text-slate-600 dark:text-slate-300">
               Explore traditional flavors and refreshing drinks
               selected for your next meal.
             </p>
@@ -180,14 +180,14 @@ export default function HomePage() {
           {specials.map((dish) => (
             <article
               key={dish.id}
-              className="group overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+              className="group overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <Link
                 href={`/menu/${dish.id}`}
                 className="block focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-amber-600"
                 aria-label={`View ${dish.name}, ETB ${dish.price}`}
               >
-                <div className="relative aspect-[4/3] overflow-hidden bg-stone-100">
+                <div className="relative aspect-[4/3] overflow-hidden bg-stone-100 dark:bg-slate-800">
                   <Image
                     src={dish.image}
                     alt={dish.name}
@@ -207,7 +207,7 @@ export default function HomePage() {
                       {dish.name}
                     </h3>
 
-                    <span className="shrink-0 rounded-lg bg-amber-50 px-3 py-1.5 text-sm font-extrabold text-amber-900">
+                    <span className="shrink-0 rounded-lg bg-amber-50 px-3 py-1.5 text-sm font-extrabold text-amber-900 dark:bg-amber-400/15 dark:text-amber-300">
                       ETB {dish.price}
                     </span>
                   </div>
