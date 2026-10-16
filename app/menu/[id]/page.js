@@ -14,7 +14,6 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-
   const dish = getDishById(id);
 
   if (!dish) {
@@ -24,20 +23,22 @@ export async function generateMetadata({ params }) {
     };
   }
 
+  const description = `${dish.name} — ETB ${dish.price}. ${dish.description}`;
+
   return {
-    title: dish.name,
-    description: `${dish.name} — ETB ${dish.price}. ${dish.description} `,
+    title: `${dish.name} | Addis Eats`,
+    description,
     alternates: {
-      canonical: `/ menu / ${dish.id} `,
+      canonical: `/menu/${dish.id}`,
     },
     openGraph: {
-      title: `${dish.name} · Addis Eats`,
-      description: `${dish.name} — ETB ${dish.price}. ${dish.description} `,
+      title: `${dish.name} | Addis Eats`,
+      description,
       type: "website",
       locale: "en_ET",
       images: [
         {
-          url: `/ menu / ${dish.id}/opengraph-image`,
+          url: `/menu/${dish.id}/opengraph-image`,
           width: 1200,
           height: 630,
           alt: `${dish.name} — Addis Eats`,
@@ -49,7 +50,6 @@ export async function generateMetadata({ params }) {
 
 export default async function DishPage({ params }) {
   const { id } = await params;
-
   const dish = getDishById(id);
 
   if (!dish) {
@@ -69,7 +69,7 @@ export default async function DishPage({ params }) {
   };
 
   return (
-    <main>
+    <main className="min-h-screen bg-stone-50 px-5 py-8 text-slate-900 transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100 sm:px-8 sm:py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -77,54 +77,90 @@ export default async function DishPage({ params }) {
         }}
       />
 
-      <Link
-        href="/menu"
-        className="inline-block text-sm font-semibold text-slate-600 hover:text-slate-900"
-      >
-        ← Back to Menu
-      </Link>
+      <div className="mx-auto max-w-5xl">
+        <Link
+          href="/menu"
+          className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 transition hover:border-amber-400 hover:bg-amber-50 hover:text-amber-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-amber-400 dark:hover:bg-slate-800 dark:hover:text-amber-300"
+        >
+          <span aria-hidden="true">←</span>
+          Back to Menu
+        </Link>
 
-      <div className="mt-8 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
-        {dish.image ? (
-          <Image
-            src={dish.image}
-            alt={dish.name}
-            width={1200}
-            height={288}
-            sizes="(max-width: 768px) 100vw, 1200px"
-            className="h-72 w-full object-cover"
-          />
-        ) : (
-          <div className="flex h-72 items-center justify-center bg-slate-200 text-slate-500">
-            No image available
-          </div>
-        )}
+        <article className="mt-6 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <div className="relative bg-slate-100 dark:bg-slate-800">
+            {dish.image ? (
+              <Image
+                src={dish.image}
+                alt={dish.name}
+                width={1200}
+                height={630}
+                sizes="(max-width: 768px) 100vw, 1200px"
+                className="h-64 w-full object-cover sm:h-80 lg:h-[420px]"
+                priority
+              />
+            ) : (
+              <div className="flex h-64 items-center justify-center text-sm font-medium text-slate-500 dark:text-slate-400 sm:h-80 lg:h-[420px]">
+                No image available
+              </div>
+            )}
 
-        <div className="p-8">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+            {dish.category && (
+              <span className="absolute left-5 top-5 rounded-full border border-white/20 bg-slate-950/85 px-4 py-2 text-sm font-bold capitalize text-amber-300 backdrop-blur-sm sm:left-7 sm:top-7">
                 {dish.category}
-              </p>
+              </span>
+            )}
+          </div>
 
-              <h1 className="mt-2 text-4xl font-bold text-slate-900">
-                {dish.name}
-              </h1>
+          <div className="p-5 sm:p-8 lg:p-10">
+            <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-start">
+              <div className="min-w-0">
+                <p className="text-sm font-bold uppercase tracking-[0.16em] text-amber-700 dark:text-amber-400">
+                  Fresh from our kitchen
+                </p>
+
+                <h1 className="mt-3 break-words text-3xl font-extrabold tracking-tight text-slate-950 dark:text-white sm:text-4xl lg:text-5xl">
+                  {dish.name}
+                </h1>
+              </div>
+
+              <div className="w-fit shrink-0 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 dark:border-amber-400/20 dark:bg-amber-400/10">
+                <p className="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300">
+                  Price
+                </p>
+
+                <p className="mt-1 whitespace-nowrap text-2xl font-extrabold text-amber-900 dark:text-amber-300">
+                  ETB {dish.price}
+                </p>
+              </div>
             </div>
 
-            <p className="text-2xl font-bold text-slate-900">
-              ETB {dish.price}
-            </p>
-          </div>
+            <div className="mt-7 border-t border-slate-100 pt-6 dark:border-slate-800">
+              <h2 className="text-lg font-extrabold text-slate-900 dark:text-white">
+                About this dish
+              </h2>
 
-          <p className="mt-6 max-w-2xl leading-7 text-slate-600">
-            {dish.description}
-          </p>
+              <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-400 sm:text-base">
+                {dish.description}
+              </p>
+            </div>
 
-          <div className="mt-8">
-            <AddToCartButton dish={dish} />
+            <div className="mt-8 flex flex-col gap-4 rounded-2xl bg-slate-50 p-5 dark:bg-slate-800/70 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+              <div>
+                <h2 className="font-extrabold text-slate-900 dark:text-white">
+                  Ready to enjoy it?
+                </h2>
+
+                <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                  Add this dish to your cart and continue to checkout.
+                </p>
+              </div>
+
+              <div className="shrink-0">
+                <AddToCartButton dish={dish} />
+              </div>
+            </div>
           </div>
-        </div>
+        </article>
       </div>
     </main>
   );
