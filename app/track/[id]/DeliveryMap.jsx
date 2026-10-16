@@ -14,10 +14,10 @@ import L from "leaflet";
 import { useEffect } from "react";
 
 const courierIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.jpg",
   iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.jpg",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.jpg",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
@@ -47,7 +47,7 @@ export default function DeliveryMap({
       >
         <TileLayer
           attribution='&copy; OpenStreetMap contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.jpg"
         />
 
         <Marker position={courier} icon={courierIcon}>
