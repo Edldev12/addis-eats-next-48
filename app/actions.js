@@ -12,20 +12,27 @@ import {
 const users = [
   {
     id: "user-1",
+    name: "Admin",
+    phone: "0900000000",
+    password: "ChangeMe123!",
+    role: "admin",
+  },
+  {
+    id: "user-2",
     name: "Edlawit",
     phone: "0911111111",
     password: "123456",
     role: "customer",
   },
   {
-    id: "user-2",
+    id: "user-3",
     name: "Staff User",
     phone: "0922222222",
     password: "123456",
     role: "staff",
   },
   {
-    id: "user-3",
+    id: "user-4",
     name: "Test Customer",
     phone: "0933333333",
     password: "123456",

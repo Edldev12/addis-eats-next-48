@@ -32,13 +32,21 @@ export async function proxy(request) {
 
   if (!session) {
     const url = new URL("/signin", request.url);
-
     url.searchParams.set("next", pathname);
-
     return NextResponse.redirect(url);
   }
 
-  if (pathname.startsWith("/kitchen") && session.role !== "staff") {
+  if (
+    pathname.startsWith("/dashboard") &&
+    session.role !== "admin"
+  ) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  if (
+    pathname.startsWith("/kitchen") &&
+    session.role !== "staff"
+  ) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
@@ -50,5 +58,6 @@ export const config = {
     "/checkout/:path*",
     "/orders/:path*",
     "/kitchen/:path*",
+    "/dashboard/:path*",
   ],
 };
