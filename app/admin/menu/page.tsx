@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import AddDishForm from "./AddDishForm";
 
 const initialDishes = [
   { id: "kitfo", name: "Kitfo", price: 450, category: "Traditional", image: "/images/kitfo.jpg" },
@@ -19,16 +20,24 @@ const initialDishes = [
 export default function AdminMenuPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
-  const [dishes] = useState(initialDishes);
 
   const categories = ["All", ...new Set(initialDishes.map((dish) => dish.category))];
-
+  const [dishes, setDishes] = useState(initialDishes);
+  const [showAddForm, setShowAddForm] = useState(false);
   const filteredDishes = dishes.filter((dish) => {
     const matchesSearch = dish.name.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = category === "All" || dish.category === category;
     return matchesSearch && matchesCategory;
   });
+  function handleAddDish(dish: (typeof initialDishes)[number]) {
+    if (dishes.some((item) => item.id === dish.id)) {
+      alert("A dish with this name already exists.");
+      return;
+    }
 
+    setDishes((current) => [...current, dish]);
+    setShowAddForm(false);
+  }
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-8 text-white sm:px-8">
       <div className="mx-auto max-w-7xl">
@@ -49,13 +58,16 @@ export default function AdminMenuPage() {
 
           <button
             type="button"
-            disabled
-            title="We'll implement adding dishes in the next step."
-            className="cursor-not-allowed rounded-lg bg-cyan-500/50 px-5 py-3 font-semibold text-slate-950"
+            onClick={() => setShowAddForm((open) => !open)}
+            className="rounded-lg bg-cyan-500 px-5 py-3 font-semibold text-slate-950 hover:bg-cyan-400"
           >
-            + Add Dish (Next Step)
+            {showAddForm ? "Close Form" : "+ Add Dish"}
           </button>
         </div>
+
+        {showAddForm && (
+          <AddDishForm onAdd={handleAddDish} onCancel={() => setShowAddForm(false)} />
+        )}
 
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
