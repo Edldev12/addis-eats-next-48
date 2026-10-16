@@ -61,12 +61,25 @@ export default function HomePage() {
           __html: JSON.stringify(jsonLd),
         }}
       />
-
       {/* Hero */}
-      <section className="relative isolate bg-slate-950 text-white">
+      <section className="relative isolate overflow-hidden bg-slate-950 text-white">
+        {/* Background image on mobile */}
+        <div aria-hidden="true" className="absolute inset-0 -z-10 lg:hidden">
+          <Image
+            src="/images/hero.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center opacity-90"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-slate-950/50 to-slate-950" />
+        </div>
+
+        {/* Desktop background glow */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-900/40 via-slate-950 to-slate-950"
+          className="absolute inset-0 -z-10 hidden bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-900/40 via-slate-950 to-slate-950 lg:block"
         />
 
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-2 lg:gap-14 lg:px-10 lg:py-24">
@@ -83,7 +96,7 @@ export default function HomePage() {
               </span>
             </h1>
 
-            <p className="mt-6 max-w-xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
+            <p className="mt-6 max-w-xl text-base leading-7 text-slate-200 sm:text-lg sm:leading-8">
               From authentic Ethiopian dishes to refreshing fruit
               drinks, discover something delicious with Addis Eats.
             </p>
@@ -91,30 +104,28 @@ export default function HomePage() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/menu"
-                className="inline-flex min-h-12 items-center justify-center rounded-xl bg-amber-400 px-6 py-3 font-bold text-slate-950 dark:text-white transition-colors hover:bg-amber-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-400"
+                className="inline-flex min-h-12 items-center justify-center rounded-xl bg-amber-400 px-6 py-3 font-bold text-slate-950 transition-colors hover:bg-amber-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-400"
               >
-                Explore Our Menu
-                <span aria-hidden="true" className="ml-2">
-                  →
-                </span>
+                Explore Our Menu <span aria-hidden="true" className="ml-2">→</span>
               </Link>
 
               <Link
                 href="/cart"
-                className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-3 font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 bg-slate-950/40 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
               >
                 View Your Cart
               </Link>
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-white/10 pt-6 text-sm text-slate-300">
+            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-white/20 pt-6 text-sm text-slate-200">
               <span>Authentic flavors</span>
               <span>Fresh favorites</span>
               <span>Simple ordering</span>
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
+          {/* Desktop image card */}
+          <div className="relative mx-auto hidden w-full max-w-xl lg:block lg:max-w-none">
             <div
               aria-hidden="true"
               className="absolute -inset-3 rounded-[2rem] bg-amber-400/10 blur-2xl"
@@ -126,7 +137,7 @@ export default function HomePage() {
                 alt="A selection of delicious food at Addis Eats"
                 fill
                 priority
-                sizes="(max-width: 1023px) 100vw, 50vw"
+                sizes="50vw"
                 className="object-cover"
               />
 
@@ -142,6 +153,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
 
       {/* Featured dishes */}
       <section
@@ -229,7 +241,7 @@ export default function HomePage() {
 
       {/* Call to action */}
       <section className="px-5 pb-14 sm:px-8 sm:pb-20 lg:px-10">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl bg-amber-400 px-6 py-10 sm:px-10 sm:py-14 lg:px-14">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl bg-amber-500 px-6 py-10 sm:px-10 sm:py-14 lg:px-14">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
             <div className="max-w-2xl">
               <p className="text-sm font-extrabold uppercase tracking-[0.16em] text-amber-950/70">
