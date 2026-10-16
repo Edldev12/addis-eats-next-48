@@ -70,6 +70,15 @@ export async function signIn(formData) {
     redirect("/");
   }
 
+  // Redirect users based on their role.
+  if (user.role === "admin") {
+    redirect("/admin");
+  }
+
+  if (user.role === "staff") {
+    redirect("/kitchen");
+  }
+
   redirect(next);
 }
 
