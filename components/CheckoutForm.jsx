@@ -9,11 +9,11 @@ export default function CheckoutForm() {
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
   const [message, setMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
-  // Prevent duplicate submissions before React re-renders.
   const submittingRef = useRef(false);
 
   const total = cart.reduce(
@@ -40,6 +40,7 @@ export default function CheckoutForm() {
 
       formData.append("name", name);
       formData.append("phone", phone);
+      formData.append("address", address);
       formData.append("items", JSON.stringify(cart));
 
       const result = await placeOrder(formData);
@@ -54,6 +55,7 @@ export default function CheckoutForm() {
       clearCart();
       setName("");
       setPhone("");
+      setAddress("");
     } catch (error) {
       console.error("Failed to place order:", error);
       setMessage("Unable to place your order. Please try again.");
@@ -199,7 +201,26 @@ export default function CheckoutForm() {
                 {fieldErrors.items}
               </p>
             )}
+            <div>
+              <label
+                htmlFor="address"
+                className="mb-2 block text-sm font-bold text-slate-700 dark:text-slate-200"
+              >
+                Delivery address
+              </label>
 
+              <textarea
+                id="address"
+                name="address"
+                autoComplete="street-address"
+                required
+                rows={3}
+                value={address}
+                onChange={(event) => setAddress(event.target.value)}
+                placeholder="Enter your area, street, building, or nearby landmark"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
+              />
+            </div>
             <button
               type="submit"
               disabled={submitting || cart.length === 0}

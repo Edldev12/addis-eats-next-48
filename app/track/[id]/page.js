@@ -124,6 +124,12 @@ export default async function TrackPage({ params }) {
 
             <div className="p-3 sm:p-5">
               <MapPanel courier={courier} delivery={delivery} />
+              {order.address && (
+                <p className="mb-4 text-sm text-slate-600 dark:text-slate-300">
+                  <span className="font-semibold">Delivery address: </span>
+                  {order.address}
+                </p>
+              )}
             </div>
           </section>
 

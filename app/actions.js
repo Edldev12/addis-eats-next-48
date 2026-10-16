@@ -99,6 +99,7 @@ export async function placeOrder(formData) {
   const itemsValue = formData.get("items");
 
   let items = [];
+  const address = formData.get("address");
 
   try {
     items = itemsValue ? JSON.parse(itemsValue) : [];
@@ -114,6 +115,7 @@ export async function placeOrder(formData) {
   const result = validateOrder({
     name,
     phone,
+    address,
     items,
   });
 
