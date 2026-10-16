@@ -17,9 +17,19 @@ export default function AddToCartButton({ dish }) {
       type="button"
       onClick={handleAdd}
       aria-label={`Add ${dish.name} to cart`}
-      className="inline-flex min-h-11 items-center justify-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-amber-400 px-5 py-2.5 text-sm font-extrabold text-slate-950 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 active:translate-y-0"
     >
-      {added ? "Added to Cart" : "Add to Cart"}
+      {added ? (
+        <>
+          <span aria-hidden="true">✓</span>
+          Added to Cart
+        </>
+      ) : (
+        <>
+          <span aria-hidden="true">+</span>
+          Add to Cart
+        </>
+      )}
     </button>
   );
 }
