@@ -48,7 +48,7 @@ export default async function OrderPage({ params }) {
           </h1>
 
           <p className="mx-auto mt-4 max-w-md leading-7 text-slate-600 dark:text-slate-400">
-            We couldn’t find this order, or you may not have permission to
+            We couldn&apos;t find this order, or you may not have permission to
             view it.
           </p>
 
@@ -86,7 +86,7 @@ export default async function OrderPage({ params }) {
             </h1>
 
             <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-400 sm:text-base">
-              Follow your order’s progress. Its status will update
+              Follow your order&apos;s progress. Its status will update
               automatically while live tracking is connected.
             </p>
           </div>

@@ -8,20 +8,20 @@ export default function DishCard({ dish, priority = false }) {
       <Link
         href={`/menu/${dish.id}`}
         aria-label={`View details for ${dish.name}`}
-        className="relative block overflow-hidden bg-slate-100 dark:bg-slate-800"
+        className="relative block h-56 overflow-hidden bg-slate-100 dark:bg-slate-800"
       >
+
         {dish.image ? (
           <Image
             src={dish.image}
             alt={dish.name}
-            width={400}
-            height={224}
+            fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
             priority={priority}
-            className="h-56 w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-56 items-center justify-center bg-slate-100 text-sm font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+          <div className="flex h-full items-center justify-center bg-slate-100 text-sm font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
             No image available
           </div>
         )}

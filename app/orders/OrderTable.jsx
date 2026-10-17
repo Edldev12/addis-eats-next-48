@@ -81,7 +81,7 @@ export default function OrderTable({ orders }) {
                   >
                     <td className="whitespace-nowrap px-5 py-5 sm:px-6">
                       <Link
-                        href={`/ track / ${order.id} `}
+                        href={`/track/${order.id}`}
                         className="inline-flex items-center gap-2 font-extrabold text-amber-700 transition hover:text-amber-900 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 dark:text-amber-400 dark:hover:text-amber-300"
                       >
                         #{order.id.slice(0, 8)}
