@@ -1,8 +1,8 @@
 "use client";
-
-import { useRef, useState } from "react";
+import LocationPicker from "@/app/checkout/LocationPicker";
 import { useCart } from "@/app/providers";
 import { placeOrder } from "@/app/actions";
+import { useCallback, useRef, useState } from "react";
 
 export default function CheckoutForm() {
   const { cart, clearCart } = useCart();
@@ -13,57 +13,85 @@ export default function CheckoutForm() {
   const [message, setMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
-
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
   const submittingRef = useRef(false);
 
   const total = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-
+  const handleLocationChange = useCallback(({ latitude, longitude }) => {
+    setLatitude(latitude);
+    setLongitude(longitude);
+  }, []);
   const isError =
-    message.toLowerCase().includes("unable") ||
-    message.toLowerCase().includes("failed");
+    /unable|failed|please|error|invalid|not found/i.test(message);
 
   async function handleSubmit(event) {
     event.preventDefault();
+    console.log("1. Submit handler started");
 
-    if (submittingRef.current) return;
+    console.log("2. Coordinates:", { latitude, longitude });
+
+    if (latitude === null || longitude === null) {
+      setMessage("Please search your address or select a point on the map.");
+      console.error("STOPPED: Delivery coordinates are missing");
+      return;
+    }
+
+    if (submittingRef.current) {
+      console.log("STOPPED: Already submitting");
+      return;
+    }
+
     submittingRef.current = true;
-
     setSubmitting(true);
     setMessage("");
     setFieldErrors({});
 
     try {
       const formData = new FormData();
-
       formData.append("name", name);
       formData.append("phone", phone);
       formData.append("address", address);
+      formData.append("latitude", String(latitude));
+      formData.append("longitude", String(longitude));
       formData.append("items", JSON.stringify(cart));
+
+      console.log("3. Calling placeOrder");
 
       const result = await placeOrder(formData);
 
+      console.log("4. placeOrder result:", result);
+
       if (!result.success) {
+        console.error("Order validation failed:", result);
         setFieldErrors(result.fieldErrors || {});
-        setMessage(result.message || "");
+        setMessage(
+          result.message ||
+          Object.values(result.fieldErrors || {}).flat().join(" ") ||
+          "Order could not be placed."
+        );
         return;
       }
 
-      setMessage(result.message);
+      setMessage(result.message || "Order placed successfully!");
       clearCart();
       setName("");
       setPhone("");
       setAddress("");
+      setLatitude(null);
+      setLongitude(null);
     } catch (error) {
-      console.error("Failed to place order:", error);
+      console.error("5. Order submission failed:", error);
       setMessage("Unable to place your order. Please try again.");
     } finally {
       submittingRef.current = false;
       setSubmitting(false);
     }
   }
+
 
   if (cart.length === 0 && !message) {
     return (
@@ -208,7 +236,15 @@ export default function CheckoutForm() {
               >
                 Delivery address
               </label>
-
+              {Object.entries(fieldErrors).map(([field, error]) => (
+                <p
+                  key={field}
+                  className="mt-2 text-sm text-red-600 dark:text-red-400"
+                  role="alert"
+                >
+                  {String(error)}
+                </p>
+              ))}
               <textarea
                 id="address"
                 name="address"
@@ -220,26 +256,37 @@ export default function CheckoutForm() {
                 placeholder="Enter your area, street, building, or nearby landmark"
                 className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
               />
+              <LocationPicker
+                latitude={latitude}
+                longitude={longitude}
+                onLocationChange={handleLocationChange}
+                address={address}
+              />
             </div>
+
 
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-5 py-3 font-extrabold text-slate-950 shadow-sm transition hover:bg-amber-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl bg-amber-500 px-6 py-4 text-base font-extrabold text-slate-950 shadow-lg shadow-amber-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-400 hover:shadow-xl hover:shadow-amber-500/30 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
             >
               {submitting ? (
                 <>
                   <span
-                    className="h-4 w-4 animate-spin rounded-full border-2 border-slate-950/30 border-t-slate-950"
+                    className="h-5 w-5 animate-spin rounded-full border-2 border-slate-950/30 border-t-slate-950"
                     aria-hidden="true"
                   />
                   Placing Order...
                 </>
               ) : (
-                <>Place Order <span aria-hidden="true">→</span></>
+                <>
+                  Place Order
+                  <span aria-hidden="true" className="text-xl">
+                    →
+                  </span>
+                </>
               )}
             </button>
-
             <p className="text-center text-xs leading-5 text-slate-500 dark:text-slate-400">
               Please check your details before placing your order.
             </p>

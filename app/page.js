@@ -70,7 +70,7 @@ export default function HomePage() {
             alt=""
             fill
             priority
-            sizes="100vw"
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover object-center opacity-90"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-slate-950/50 to-slate-950" />

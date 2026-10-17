@@ -8,7 +8,7 @@ export default function OrderStatus({ id, initial }) {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const source = new EventSource(`/ api / orders / ${id}/stream`);
+    const source = new EventSource(`/api/orders/${id}/stream`);
 
     source.onopen = () => {
       setConnected(true);

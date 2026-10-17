@@ -61,8 +61,14 @@ export default async function TrackPage({ params }) {
   }
 
   const courier = [8.9806, 38.7578];
-  const delivery = [8.995, 38.763];
 
+  const hasDeliveryLocation =
+    Number.isFinite(order.latitude) &&
+    Number.isFinite(order.longitude);
+
+  const delivery = hasDeliveryLocation
+    ? [order.latitude, order.longitude]
+    : null;
   return (
     <main className="min-h-screen bg-stone-50 px-4 py-10 dark:bg-slate-950 sm:px-6 sm:py-14">
       <div className="mx-auto max-w-5xl">
@@ -123,7 +129,14 @@ export default async function TrackPage({ params }) {
             </div>
 
             <div className="p-3 sm:p-5">
-              <MapPanel courier={courier} delivery={delivery} />
+              {delivery ? (
+                <MapPanel courier={courier} delivery={delivery} />
+              ) : (
+                <div className="rounded-xl bg-amber-50 p-4 text-sm text-amber-800 dark:bg-amber-400/10 dark:text-amber-300">
+                  No saved delivery coordinates are available for this order. Place a new
+                  order and select your delivery location on the map.
+                </div>
+              )}
               {order.address && (
                 <p className="mb-4 text-sm text-slate-600 dark:text-slate-300">
                   <span className="font-semibold">Delivery address: </span>

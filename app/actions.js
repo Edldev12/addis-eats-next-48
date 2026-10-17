@@ -101,6 +101,19 @@ export async function placeOrder(formData) {
   let items = [];
   const address = formData.get("address");
 
+  const latitudeValue = formData.get("latitude");
+  const longitudeValue = formData.get("longitude");
+
+  const latitude =
+    latitudeValue !== null && latitudeValue !== ""
+      ? Number(latitudeValue)
+      : null;
+
+  const longitude =
+    longitudeValue !== null && longitudeValue !== ""
+      ? Number(longitudeValue)
+      : null;
+
   try {
     items = itemsValue ? JSON.parse(itemsValue) : [];
   } catch {
@@ -111,7 +124,19 @@ export async function placeOrder(formData) {
       },
     };
   }
-
+  if (
+    (latitude === null) !== (longitude === null) ||
+    (latitude !== null &&
+      (!Number.isFinite(latitude) ||
+        !Number.isFinite(longitude) ||
+        Math.abs(latitude) > 90 ||
+        Math.abs(longitude) > 180))
+  ) {
+    return {
+      success: false,
+      message: "Please select a valid delivery location on the map.",
+    };
+  }
   const result = validateOrder({
     name,
     phone,
@@ -120,9 +145,12 @@ export async function placeOrder(formData) {
   });
 
   if (!result.success) {
+    console.error("Order validation errors:", result.fieldErrors);
+
     return {
       success: false,
-      fieldErrors: result.fieldErrors,
+      message: "Please correct the highlighted fields and try again.",
+      fieldErrors: result.fieldErrors || {},
     };
   }
 
@@ -132,6 +160,8 @@ export async function placeOrder(formData) {
     id: crypto.randomUUID(),
     userId: user.id,
     ...result.data,
+    latitude,
+    longitude,
     status: "pending",
     createdAt: new Date().toISOString(),
   };
